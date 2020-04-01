@@ -1,2 +1,2 @@
 # Vitual-Keyboard
-Virtual keyboard as taks of RS School
+Virtual keyboard as task of RS School.
