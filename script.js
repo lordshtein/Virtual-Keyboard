@@ -3,6 +3,7 @@ const Keyboard = {
     wrapper: null,
     keyboardLayout: null,
     keys: [],
+    textarea: null,
   },
 
 
@@ -10,6 +11,7 @@ const Keyboard = {
     inputValue: '',
     capslock: 0,
     language: 'ru',
+    shift: 0,
   },
 
   keyLayout: [{
@@ -177,7 +179,7 @@ const Keyboard = {
   {
     eventCode: 'KeyF',
     ru: ['а', 'А'],
-    en: ['f', 'f'],
+    en: ['f', 'F'],
   },
   {
     eventCode: 'KeyG',
@@ -309,7 +311,7 @@ const Keyboard = {
   {
     eventCode: 'AltRight',
     ru: ['Alt', 'Alt'],
-    en: ['Alt', 'AltAlt'],
+    en: ['Alt', 'Alt'],
   },
   {
     eventCode: 'ArrowLeft',
@@ -336,13 +338,14 @@ const Keyboard = {
   init() {
     this.elements.wrapper = document.createElement('div');
     this.elements.keyboardLayout = document.createElement('div');
+    this.elements.textarea = document.createElement('textarea');
 
-
+    this.elements.textarea.classList.add('text-input');
     this.elements.wrapper.classList.add('wrapper');
     this.elements.keyboardLayout.classList.add('keyboard-layout');
-
     this.elements.keyboardLayout.appendChild(this.createLayout());
 
+    document.body.appendChild(this.elements.textarea);
     this.elements.wrapper.appendChild(this.elements.keyboardLayout);
     document.body.appendChild(this.elements.wrapper);
 
@@ -372,6 +375,14 @@ const Keyboard = {
           newKey.classList.add('key-btn', 'large');
           newKey.id = key.eventCode;
           newKey.innerHTML = createIcon('backspace');
+          newKey.addEventListener('click', () => {
+            this.properties.inputValue = this.properties.inputValue.substring(0, this.properties.inputValue.length - 1);
+          });
+          document.addEventListener('keydown', (event) => {
+            if (event.code === 'Backspace') {
+              newKey.click();
+            }
+          });
           break;
 
         case 'Tab':
@@ -392,27 +403,61 @@ const Keyboard = {
           newKey.innerHTML = createIcon('keyboard_capslock');
           newKey.id = key.eventCode;
           newKey.addEventListener('click', () => this.toggleCaps());
+          document.addEventListener('keydown', (event) => {
+            if (event.code === 'CapsLock') {
+              newKey.click();
+            }
+          });
           break;
 
         case 'Enter':
           newKey.classList.add('key-btn', 'large');
           newKey.id = key.eventCode;
           newKey.innerHTML = createIcon('keyboard_return');
+          newKey.addEventListener('click', () => {
+            this.properties.value += '\n';
+          });
+          document.addEventListener('keydown', (event) => {
+            if (event.code === 'Enter') {
+              newKey.click();
+            }
+          });
           break;
 
         case 'ShiftLeft':
           newKey.innerText = key[lang][switcher];
           newKey.id = key.eventCode;
           newKey.classList.add('key-btn', 'large');
-
-
+          document.addEventListener('keydown', (event) => {
+            event.preventDefault();
+            if (event.code === 'ShiftLeft' && this.properties.shift === 0) {
+              this.properties.shift = 1;
+              this.toggleCaps();
+            }
+          });
+          document.addEventListener('keyup', (event) => {
+            if (event.code === 'ShiftLeft') {
+              this.toggleCaps();
+              this.properties.shift = 0;
+            }
+          });
           break;
 
         case 'ShiftRight':
           newKey.innerText = key[lang][switcher];
           newKey.id = key.eventCode;
           newKey.classList.add('key-btn', 'large');
-
+          document.addEventListener('keydown', (event) => {
+            event.preventDefault();
+            if (event.code === 'ShiftRight') {
+              this.toggleCaps();
+            }
+          });
+          document.addEventListener('keyup', (event) => {
+            if (event.code === 'ShiftRight') {
+              this.toggleCaps();
+            }
+          });
           break;
 
 
@@ -420,14 +465,17 @@ const Keyboard = {
           newKey.innerText = key[lang][switcher];
           newKey.id = key.eventCode;
           newKey.classList.add('key-btn', 'large');
-
+          document.addEventListener('keydown', (event) => {
+            if (event.code === 'ControlLeft' && event.altKey) {
+              this.toggleLanguage();
+            }
+          });
           break;
 
         case 'ControlRight':
           newKey.innerText = key[lang][switcher];
           newKey.id = key.eventCode;
           newKey.classList.add('key-btn');
-
           break;
 
         case 'MetaLeft':
@@ -455,13 +503,11 @@ const Keyboard = {
           newKey.innerText = key[lang][switcher];
           newKey.id = key.eventCode;
           newKey.classList.add('key-btn');
-
           break;
 
         default:
           newKey.innerText = key[lang][switcher];
           newKey.id = key.eventCode;
-
           break;
       }
 
@@ -476,41 +522,34 @@ const Keyboard = {
   },
 
   toggleCaps() {
+    console.log('caps');
     this.properties.capslock = this.properties.capslock === 1 ? 0 : 1;
     const switcher = this.properties.capslock;
-
-    for (let i = 0; i < this.elements.keys.length; i + 1) {
+    const lang = this.properties.language;
+    for (let i = 0; i < this.elements.keys.length; i += 1) {
       const key = this.elements.keys[i];
       if (key.childElementCount === 0) {
-        key.innerText = this.keyLayout[i].ru[switcher];
+        key.innerText = this.keyLayout[i][lang][switcher];
       }
     }
   },
 
   toggleLanguage() {
-    this.properties.capslock = this.properties.capslock === 1 ? 0 : 1;
+    console.log('lang');
+    this.properties.language = this.properties.language === 'en' ? 'ru' : 'en';
     const switcher = this.properties.capslock;
-
-    for (let i = 0; i < this.elements.keys.length; i + 1) {
+    const lang = this.properties.language;
+    for (let i = 0; i < this.elements.keys.length; i += 1) {
       const key = this.elements.keys[i];
       if (key.childElementCount === 0) {
-        key.innerText = this.keyLayout[i].ru[switcher];
+        key.innerText = this.keyLayout[i][lang][switcher];
       }
     }
   },
+
 };
 
 
 window.addEventListener('DOMContentLoaded', () => {
   Keyboard.init();
 });
-
-document.addEventListener('keydown', (event) => {
-  if (event.code === 'CapsLock') {
-    Keyboard.toggleCaps();
-  }
-});
-
-
-// евент слушатель на документ ловить кейкод, добавить кнопка id = keyCode.
-// сравнивать и запускать функцию как по клику.
