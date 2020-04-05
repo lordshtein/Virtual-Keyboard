@@ -203,16 +203,21 @@ const Keyboard = {
   },
   {
     eventCode: 'KeyL',
+    ru: ['д', 'Д'],
+    en: ['l', 'L'],
+  },
+  {
+    eventCode: 'Semicolon',
     ru: ['ж', 'Ж'],
     en: [';', ':'],
   },
   {
-    eventCode: 'KeyA',
+    eventCode: 'Quote',
     ru: ['э', 'Э'],
     en: ["'", '"'],
   },
   {
-    eventCode: 'KeyA',
+    eventCode: 'Backslash',
     ru: ['\\', '/'],
     en: ['\\', '||'],
   },
@@ -356,7 +361,6 @@ const Keyboard = {
   createLayout() {
     const fragment = document.createDocumentFragment();
 
-
     const createIcon = (name) => `<i class="material-icons">${name}</i>`;
 
     const switcher = this.properties.capslock;
@@ -369,6 +373,8 @@ const Keyboard = {
       newKey.classList.add('key-btn');
 
       const newLine = ['Backspace', 'Delete', 'Enter', 'ShiftRight'].indexOf(key.eventCode);
+      this.mouseDownEvent(newKey);
+      this.mouseUpEvent(newKey);
 
       switch (key.eventCode) {
         case 'Backspace':
@@ -376,7 +382,9 @@ const Keyboard = {
           newKey.id = key.eventCode;
           newKey.innerHTML = createIcon('backspace');
           newKey.addEventListener('click', () => {
-            this.properties.inputValue = this.properties.inputValue.substring(0, this.properties.inputValue.length - 1);
+            this.properties.inputValue = this.properties.inputValue.substring(0,
+              this.properties.inputValue.length - 1);
+            this.refreshText();
           });
           document.addEventListener('keydown', (event) => {
             if (event.code === 'Backspace') {
@@ -386,22 +394,33 @@ const Keyboard = {
           break;
 
         case 'Tab':
-          newKey.classList.add('key-btn', 'large');
+          newKey.classList.add('key-btn', 'half-large');
           newKey.id = key.eventCode;
+
           newKey.innerHTML = createIcon('tab');
+          newKey.addEventListener('click', () => {
+            this.properties.inputValue += '    ';
+          });
+          document.addEventListener('keydown', (event) => {
+            if (event.code === 'Tab') {
+              newKey.click();
+            }
+          });
           break;
 
         case 'Delete':
           newKey.innerText = key[lang][switcher];
-          newKey.classList.add('key-btn', 'large');
+          newKey.classList.add('key-btn', 'half-large');
           newKey.id = key.eventCode;
+
           break;
 
 
         case 'CapsLock':
-          newKey.classList.add('key-btn', 'large');
+          newKey.classList.add('key-btn', 'half-large');
           newKey.innerHTML = createIcon('keyboard_capslock');
           newKey.id = key.eventCode;
+
           newKey.addEventListener('click', () => this.toggleCaps());
           document.addEventListener('keydown', (event) => {
             if (event.code === 'CapsLock') {
@@ -411,11 +430,13 @@ const Keyboard = {
           break;
 
         case 'Enter':
-          newKey.classList.add('key-btn', 'large');
+          newKey.classList.add('key-btn', 'half-large');
           newKey.id = key.eventCode;
           newKey.innerHTML = createIcon('keyboard_return');
+
           newKey.addEventListener('click', () => {
             this.properties.value += '\n';
+            this.refreshText();
           });
           document.addEventListener('keydown', (event) => {
             if (event.code === 'Enter') {
@@ -429,7 +450,6 @@ const Keyboard = {
           newKey.id = key.eventCode;
           newKey.classList.add('key-btn', 'large');
           document.addEventListener('keydown', (event) => {
-            event.preventDefault();
             if (event.code === 'ShiftLeft' && this.properties.shift === 0) {
               this.properties.shift = 1;
               this.toggleCaps();
@@ -447,8 +467,8 @@ const Keyboard = {
           newKey.innerText = key[lang][switcher];
           newKey.id = key.eventCode;
           newKey.classList.add('key-btn', 'large');
+
           document.addEventListener('keydown', (event) => {
-            event.preventDefault();
             if (event.code === 'ShiftRight') {
               this.toggleCaps();
             }
@@ -464,7 +484,8 @@ const Keyboard = {
         case 'ControlLeft':
           newKey.innerText = key[lang][switcher];
           newKey.id = key.eventCode;
-          newKey.classList.add('key-btn', 'large');
+
+          newKey.classList.add('key-btn', 'half-large');
           document.addEventListener('keydown', (event) => {
             if (event.code === 'ControlLeft' && event.altKey) {
               this.toggleLanguage();
@@ -476,6 +497,7 @@ const Keyboard = {
           newKey.innerText = key[lang][switcher];
           newKey.id = key.eventCode;
           newKey.classList.add('key-btn');
+
           break;
 
         case 'MetaLeft':
@@ -489,14 +511,21 @@ const Keyboard = {
           newKey.innerText = key[lang][switcher];
           newKey.id = key.eventCode;
           newKey.classList.add('key-btn');
-
           break;
 
         case 'Space':
           newKey.classList.add('key-btn', 'space');
           newKey.id = key.eventCode;
           newKey.innerHTML = createIcon('space_bar');
-
+          newKey.addEventListener('click', () => {
+            this.properties.inputValue += ' ';
+            this.refreshText();
+          });
+          document.addEventListener('keydown', (event) => {
+            if (event.code === 'Space') {
+              newKey.click();
+            }
+          });
           break;
 
         case 'AltRight':
@@ -508,6 +537,15 @@ const Keyboard = {
         default:
           newKey.innerText = key[lang][switcher];
           newKey.id = key.eventCode;
+          newKey.addEventListener('click', () => {
+            this.properties.inputValue += newKey.innerText;
+            this.refreshText();
+          });
+          document.addEventListener('keydown', (event) => {
+            if (event.code === key.eventCode) {
+              newKey.click();
+            }
+          });
           break;
       }
 
@@ -522,7 +560,6 @@ const Keyboard = {
   },
 
   toggleCaps() {
-    console.log('caps');
     this.properties.capslock = this.properties.capslock === 1 ? 0 : 1;
     const switcher = this.properties.capslock;
     const lang = this.properties.language;
@@ -535,7 +572,6 @@ const Keyboard = {
   },
 
   toggleLanguage() {
-    console.log('lang');
     this.properties.language = this.properties.language === 'en' ? 'ru' : 'en';
     const switcher = this.properties.capslock;
     const lang = this.properties.language;
@@ -547,9 +583,44 @@ const Keyboard = {
     }
   },
 
+  toggleActive(target) {
+    target.classList.toggle('active');
+  },
+
+  refreshText() {
+    this.elements.textarea.innerText = this.properties.inputValue;
+  },
+
+  mouseDownEvent(target) {
+    return target.addEventListener('mousedown', () => {
+      this.toggleActive(target);
+    });
+  },
+
+  mouseUpEvent(target) {
+    return target.addEventListener('mouseup', () => {
+      this.toggleActive(target);
+    });
+  },
 };
 
 
 window.addEventListener('DOMContentLoaded', () => {
   Keyboard.init();
+});
+
+document.addEventListener('keydown', (event) => {
+  if (document.querySelector(`#${event.code}`)) {
+    document.querySelector(`#${event.code}`).classList.add('active');
+  }
+});
+
+document.addEventListener('keyup', (event) => {
+  if (document.querySelector(`#${event.code}`)) {
+    document.querySelector(`#${event.code}`).classList.remove('active');
+  }
+});
+
+document.addEventListener('keydown', (event) => {
+  event.preventDefault();
 });

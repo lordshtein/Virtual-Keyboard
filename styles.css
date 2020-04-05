@@ -8,15 +8,20 @@ body {
   left:0;
   min-height: 200px;
   width: 100%;
-  background-color: brown;
+  align-items: center;
 }
 
 .keyboard-layout {
-  text-align:center;
+  margin: 0 auto;
+  width:60%;
+  text-align: center;
+  background-color: rgb(39, 36, 36);
+  border: 1px solid #000000;
+  padding: 10px 5px 20px 5px;
 }
 
 .text-input {
-  width: 60%;
+  width: 70%;
   margin: 50px auto;
   height: 100px;
   background-color: cornflowerblue;
@@ -25,21 +30,35 @@ body {
 
 .key-btn {
   height: 40px;
-  width: 5%;
-  margin: 2px;
+  width: 6%;
+  margin: 0.2%;
   border: none;
   cursor: pointer;
   display: inline-flex;
   justify-content: center;
   align-items: center;
   vertical-align: top;
+  outline: none;
+  color: #ffffff;
+  background-color:#A9A9A9;
+  border-radius: 2px;
 
+}
+
+.active {
+  transform: scale(0.9);
+  transition: all 0.1s;
+  background:radial-gradient(#A9A9A9, #3B444B);
 }
 
 .large {
-  width: 10%;
+  width: 12%;
+}
+
+.half-large {
+  width: 9%;
 }
 
 .space {
-  width: 30%;
+  width: 41%;
 }
