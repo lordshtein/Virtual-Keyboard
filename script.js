@@ -355,6 +355,7 @@ const Keyboard = {
     document.body.appendChild(this.elements.wrapper);
 
     this.elements.keys = this.elements.keyboardLayout.querySelectorAll('.key-btn');
+    document.addEventListener('mouseup', () => this.mouseUpEvent());
   },
 
 
@@ -374,7 +375,7 @@ const Keyboard = {
 
       const newLine = ['Backspace', 'Delete', 'Enter', 'ShiftRight'].indexOf(key.eventCode);
       this.mouseDownEvent(newKey);
-      this.mouseUpEvent(newKey);
+
 
       switch (key.eventCode) {
         case 'Backspace':
@@ -435,7 +436,7 @@ const Keyboard = {
           newKey.innerHTML = createIcon('keyboard_return');
 
           newKey.addEventListener('click', () => {
-            this.properties.value += '\n';
+            this.properties.inputValue += '\n';
             this.refreshText();
           });
           document.addEventListener('keydown', (event) => {
@@ -588,7 +589,7 @@ const Keyboard = {
   },
 
   refreshText() {
-    this.elements.textarea.innerText = this.properties.inputValue;
+    this.elements.textarea.innerHTML= this.properties.inputValue;
   },
 
   mouseDownEvent(target) {
@@ -597,10 +598,10 @@ const Keyboard = {
     });
   },
 
-  mouseUpEvent(target) {
-    return target.addEventListener('mouseup', () => {
-      this.toggleActive(target);
-    });
+  mouseUpEvent() {
+    if (document.querySelector('.active')) {
+      this.toggleActive(document.querySelector('.active'));
+    }
   },
 };
 

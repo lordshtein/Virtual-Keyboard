@@ -21,11 +21,16 @@ body {
 }
 
 .text-input {
+  display: block;
   width: 70%;
-  margin: 50px auto;
-  height: 100px;
-  background-color: cornflowerblue;
-
+  height: 400px;
+  position: relative;
+  margin: 200px auto;
+  resize: none;
+  background-color: #F5F5DC;
+  text-overflow: hidden;
+  border: 2px solid #000000;
+  outline: none;
 }
 
 .key-btn {
