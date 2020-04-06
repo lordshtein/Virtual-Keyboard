@@ -384,10 +384,12 @@ const Keyboard = {
           newKey.id = key.eventCode;
           newKey.innerHTML = createIcon('backspace');
           newKey.addEventListener('click', () => {
+            const caretPos = document.querySelector('.text-input').selectionStart;
             this.properties.inputValue = this.properties.inputValue.substring(0,
-              document.querySelector('.text-input').selectionStart - 1)
-              + this.properties.inputValue.substring(document.querySelector('.text-input').selectionStart, this.properties.inputValue.length);
+              caretPos - 1)
+              + this.properties.inputValue.substring(caretPos, this.properties.inputValue.length);
             this.refreshText();
+            document.querySelector('.text-input').selectionStart = caretPos - 1;
           });
           document.addEventListener('keydown', (event) => {
             if (event.code === 'Backspace') {
@@ -416,10 +418,11 @@ const Keyboard = {
           newKey.classList.add('key-btn', 'half-large');
           newKey.id = key.eventCode;
           newKey.addEventListener('click', () => {
-            this.properties.inputValue = this.properties.inputValue.substring(0,
-              document.querySelector('.text-input').selectionStart)
-              + this.properties.inputValue.substring(document.querySelector('.text-input').selectionStart + 1, this.properties.inputValue.length);
+            const caretPos = document.querySelector('.text-input').selectionStart;
+            this.properties.inputValue = this.properties.inputValue.substring(0, caretPos)
+            + this.properties.inputValue.substring(caretPos + 1, this.properties.inputValue.length);
             this.refreshText();
+            document.querySelector('.text-input').selectionStart = caretPos;
           });
           document.addEventListener('keydown', (event) => {
             if (event.code === 'Delete') {
@@ -448,8 +451,10 @@ const Keyboard = {
           newKey.innerHTML = createIcon('keyboard_return');
 
           newKey.addEventListener('click', () => {
+            const caretPos = document.querySelector('.text-input').selectionStart;
             this.properties.inputValue += '\n';
             this.refreshText();
+            document.querySelector('.text-input').selectionStart = caretPos + 1;
           });
           document.addEventListener('keydown', (event) => {
             if (event.code === 'Enter') {
@@ -531,8 +536,10 @@ const Keyboard = {
           newKey.id = key.eventCode;
           newKey.innerHTML = createIcon('space_bar');
           newKey.addEventListener('click', () => {
+            const caretPos = document.querySelector('.text-input').selectionStart;
             this.properties.inputValue += ' ';
             this.refreshText();
+            document.querySelector('.text-input').selectionStart = caretPos + 1;
           });
           document.addEventListener('keydown', (event) => {
             if (event.code === 'Space') {
@@ -551,8 +558,10 @@ const Keyboard = {
           newKey.innerText = key[lang][switcher];
           newKey.id = key.eventCode;
           newKey.addEventListener('click', () => {
+            const caretPos = document.querySelector('.text-input').selectionStart;
             this.properties.inputValue += newKey.innerText;
             this.refreshText();
+            document.querySelector('.text-input').selectionStart = caretPos + 1;
           });
           document.addEventListener('keydown', (event) => {
             if (event.code === key.eventCode) {
