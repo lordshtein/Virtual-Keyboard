@@ -1,3 +1,3 @@
-# Vitual-Keyboard
+# Virtual-Keyboard
 Virtual keyboard as task of RS School.
-Go to https://lordshtein.github.io/Vitual-Keyboard/
+Go to https://lordshtein.github.io/Virtual-Keyboard/
