@@ -356,16 +356,21 @@ const Keyboard = {
 
     this.elements.keys = this.elements.keyboardLayout.querySelectorAll('.key-btn');
     document.addEventListener('mouseup', () => this.mouseUpEvent());
+
+    if (!localStorage.getItem('language')) {
+      localStorage.setItem('language', 'ru');
+    }
   },
 
 
   createLayout() {
+    console.log(localStorage.getItem('language'));
     const fragment = document.createDocumentFragment();
 
     const createIcon = (name) => `<i class="material-icons">${name}</i>`;
 
     const switcher = this.properties.capslock;
-    const lang = this.properties.language;
+    const lang = localStorage.getItem('language');
 
     this.keyLayout.forEach((key) => {
       const newKey = document.createElement('button');
@@ -587,7 +592,7 @@ const Keyboard = {
   toggleCaps() {
     this.properties.capslock = this.properties.capslock === 1 ? 0 : 1;
     const switcher = this.properties.capslock;
-    const lang = this.properties.language;
+    const lang = localStorage.getItem('language');
     for (let i = 0; i < this.elements.keys.length; i += 1) {
       const key = this.elements.keys[i];
       if (key.childElementCount === 0) {
@@ -597,9 +602,14 @@ const Keyboard = {
   },
 
   toggleLanguage() {
-    this.properties.language = this.properties.language === 'en' ? 'ru' : 'en';
     const switcher = this.properties.capslock;
-    const lang = this.properties.language;
+    let lang = localStorage.getItem('language');
+    if (lang === 'ru') {
+      localStorage.setItem('language', 'en');
+    } else {
+      localStorage.setItem('language', 'ru');
+    }
+    lang = localStorage.getItem('language');
     for (let i = 0; i < this.elements.keys.length; i += 1) {
       const key = this.elements.keys[i];
       if (key.childElementCount === 0) {
