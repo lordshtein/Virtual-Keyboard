@@ -379,12 +379,14 @@ const Keyboard = {
 
       switch (key.eventCode) {
         case 'Backspace':
+
           newKey.classList.add('key-btn', 'large');
           newKey.id = key.eventCode;
           newKey.innerHTML = createIcon('backspace');
           newKey.addEventListener('click', () => {
             this.properties.inputValue = this.properties.inputValue.substring(0,
-              this.properties.inputValue.length - 1);
+              document.querySelector('.text-input').selectionStart - 1)
+              + this.properties.inputValue.substring(document.querySelector('.text-input').selectionStart, this.properties.inputValue.length);
             this.refreshText();
           });
           document.addEventListener('keydown', (event) => {
@@ -413,7 +415,17 @@ const Keyboard = {
           newKey.innerText = key[lang][switcher];
           newKey.classList.add('key-btn', 'half-large');
           newKey.id = key.eventCode;
-
+          newKey.addEventListener('click', () => {
+            this.properties.inputValue = this.properties.inputValue.substring(0,
+              document.querySelector('.text-input').selectionStart)
+              + this.properties.inputValue.substring(document.querySelector('.text-input').selectionStart + 1, this.properties.inputValue.length);
+            this.refreshText();
+          });
+          document.addEventListener('keydown', (event) => {
+            if (event.code === 'Delete') {
+              newKey.click();
+            }
+          });
           break;
 
 
@@ -589,7 +601,7 @@ const Keyboard = {
   },
 
   refreshText() {
-    this.elements.textarea.innerHTML= this.properties.inputValue;
+    this.elements.textarea.innerHTML = this.properties.inputValue;
   },
 
   mouseDownEvent(target) {
