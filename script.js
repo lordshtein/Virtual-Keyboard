@@ -364,7 +364,6 @@ const Keyboard = {
 
 
   createLayout() {
-    console.log(localStorage.getItem('language'));
     const fragment = document.createDocumentFragment();
 
     const createIcon = (name) => `<i class="material-icons">${name}</i>`;
@@ -460,7 +459,8 @@ const Keyboard = {
 
           newKey.addEventListener('click', () => {
             const caretPos = document.querySelector('.text-input').selectionStart;
-            this.properties.inputValue += '\n';
+            this.properties.inputValue = `${this.properties.inputValue.substring(0, caretPos)}\n${
+              this.properties.inputValue.substring(caretPos, this.properties.inputValue.length)}`;
             this.refreshText();
             document.querySelector('.text-input').selectionStart = caretPos + 1;
           });
@@ -545,7 +545,8 @@ const Keyboard = {
           newKey.innerHTML = createIcon('space_bar');
           newKey.addEventListener('click', () => {
             const caretPos = document.querySelector('.text-input').selectionStart;
-            this.properties.inputValue += ' ';
+            this.properties.inputValue = `${this.properties.inputValue.substring(0, caretPos)} ${
+              this.properties.inputValue.substring(caretPos, this.properties.inputValue.length)}`;
             this.refreshText();
             document.querySelector('.text-input').selectionStart = caretPos + 1;
           });
@@ -567,7 +568,8 @@ const Keyboard = {
           newKey.id = key.eventCode;
           newKey.addEventListener('click', () => {
             const caretPos = document.querySelector('.text-input').selectionStart;
-            this.properties.inputValue += newKey.innerText;
+            this.properties.inputValue = `${this.properties.inputValue.substring(0, caretPos)}${newKey.innerText}${
+              this.properties.inputValue.substring(caretPos, this.properties.inputValue.length)}`;
             this.refreshText();
             document.querySelector('.text-input').selectionStart = caretPos + 1;
           });
