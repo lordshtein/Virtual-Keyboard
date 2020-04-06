@@ -404,7 +404,10 @@ const Keyboard = {
 
           newKey.innerHTML = createIcon('tab');
           newKey.addEventListener('click', () => {
+            const caretPos = document.querySelector('.text-input').selectionStart;
             this.properties.inputValue += '    ';
+            this.refreshText();
+            document.querySelector('.text-input').selectionStart = caretPos + 4;
           });
           document.addEventListener('keydown', (event) => {
             if (event.code === 'Tab') {
