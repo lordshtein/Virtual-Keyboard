@@ -69,3 +69,8 @@ body {
 .space {
   width: 41%;
 }
+
+.information {
+  position: absolute;
+  top:0;
+}

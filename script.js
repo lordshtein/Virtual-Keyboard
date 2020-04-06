@@ -4,6 +4,7 @@ const Keyboard = {
     keyboardLayout: null,
     keys: [],
     textarea: null,
+    description: null,
   },
 
 
@@ -344,13 +345,17 @@ const Keyboard = {
     this.elements.wrapper = document.createElement('div');
     this.elements.keyboardLayout = document.createElement('div');
     this.elements.textarea = document.createElement('textarea');
+    this.elements.description = document.createElement('div');
 
     this.elements.textarea.classList.add('text-input');
     this.elements.wrapper.classList.add('wrapper');
+    this.elements.description.classList.add('information');
     this.elements.keyboardLayout.classList.add('keyboard-layout');
     this.elements.keyboardLayout.appendChild(this.createLayout());
+    this.elements.description.innerHTML = '<span>Клавиатура создана в операционной системе Windows.<br>Для смены языка нажмите левые Alt+Ctrl</span>';
 
     document.body.appendChild(this.elements.textarea);
+    document.body.appendChild(this.elements.description);
     this.elements.wrapper.appendChild(this.elements.keyboardLayout);
     document.body.appendChild(this.elements.wrapper);
 
