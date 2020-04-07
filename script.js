@@ -7,7 +7,6 @@ const Keyboard = {
     description: null,
   },
 
-
   properties: {
     inputValue: '',
     capslock: 0,
@@ -342,6 +341,9 @@ const Keyboard = {
   ],
 
   init() {
+    if (!localStorage.getItem('language')) {
+      localStorage.setItem('language', 'ru');
+    }
     this.elements.wrapper = document.createElement('div');
     this.elements.keyboardLayout = document.createElement('div');
     this.elements.textarea = document.createElement('textarea');
@@ -361,10 +363,6 @@ const Keyboard = {
 
     this.elements.keys = this.elements.keyboardLayout.querySelectorAll('.key-btn');
     document.addEventListener('mouseup', () => this.mouseUpEvent());
-
-    if (!localStorage.getItem('language')) {
-      localStorage.setItem('language', 'ru');
-    }
   },
 
 
