@@ -356,8 +356,8 @@ const Keyboard = {
     this.elements.keyboardLayout.appendChild(this.createLayout());
     this.elements.description.innerHTML = '<span>Клавиатура создана в операционной системе Windows.<br>Для смены языка нажмите левые Alt+Ctrl</span>';
 
-    document.body.appendChild(this.elements.textarea);
     document.body.appendChild(this.elements.description);
+    document.body.appendChild(this.elements.textarea);
     this.elements.wrapper.appendChild(this.elements.keyboardLayout);
     document.body.appendChild(this.elements.wrapper);
 
@@ -412,7 +412,8 @@ const Keyboard = {
           newKey.innerHTML = createIcon('tab');
           newKey.addEventListener('click', () => {
             const caretPos = document.querySelector('.text-input').selectionStart;
-            this.properties.inputValue += '    ';
+            this.properties.inputValue = `${this.properties.inputValue.substring(0, caretPos)}    ${
+              this.properties.inputValue.substring(caretPos, this.properties.inputValue.length)}`;
             this.refreshText();
             document.querySelector('.text-input').selectionStart = caretPos + 4;
           });
